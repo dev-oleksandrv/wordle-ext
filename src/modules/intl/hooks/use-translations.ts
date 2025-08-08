@@ -17,7 +17,6 @@ export function useTranslations(keyPrefix?: string) {
       }
 
       if (!key.match(KEY_REGEX)) {
-        console.log(key);
         console.warn("Invalid key format. It should match the pattern: parent.child");
         return key;
       }
