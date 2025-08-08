@@ -4,6 +4,7 @@ const TRANSLATIONS: IntlTranslationsDictionaryType = {
   setup: {
     title: "Виберіть вашу мову",
     description: "Мова буде збережена. Ви можете змінити її в будь-який час.",
+    "save-changes": "Зберегти зміни",
   },
   locales: {
     en: "Англійська",
