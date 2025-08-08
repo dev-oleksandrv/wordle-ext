@@ -15,6 +15,20 @@ export function useAttemptInput(locale: LocaleEnum, options: UseAttemptInputOpti
 
   const charsRef = useRef<GameAttemptCharType[]>([]);
 
+  const handleAttemptSubmit = useCallback(async () => {
+    if (charsRef.current.length < GAME_MAX_WORD_LENGTH) {
+      return;
+    }
+    if (options.onSubmit) {
+      await options.onSubmit({
+        chars: [...charsRef.current],
+        status: GameAttemptStatusEnum.ACTIVE,
+      });
+
+      setChars([]);
+    }
+  }, [chars, options.onSubmit]);
+
   const handleKeyboardInput = useCallback(
     async (ev: KeyboardEvent) => {
       if (options.isPending) {
@@ -24,17 +38,7 @@ export function useAttemptInput(locale: LocaleEnum, options: UseAttemptInputOpti
       const keyCode = ev.key.toLowerCase();
 
       if (keyCode === GAME_KEYBOARD_SPECIAL_KEYS.SUBMIT_KEY) {
-        if (charsRef.current.length < GAME_MAX_WORD_LENGTH) {
-          return;
-        }
-        if (options.onSubmit) {
-          await options.onSubmit({
-            chars: [...charsRef.current],
-            status: GameAttemptStatusEnum.ACTIVE,
-          });
-
-          setChars([]);
-        }
+        await handleAttemptSubmit();
         return;
       }
 
@@ -59,7 +63,7 @@ export function useAttemptInput(locale: LocaleEnum, options: UseAttemptInputOpti
         });
       }
     },
-    [locale, options.isPending, options.onSubmit],
+    [locale, options.isPending, handleAttemptSubmit],
   );
 
   useEffect(() => {
@@ -74,11 +78,14 @@ export function useAttemptInput(locale: LocaleEnum, options: UseAttemptInputOpti
     charsRef.current = chars;
   }, [chars]);
 
-  return useMemo<GameAttemptType>(
-    () => ({
-      chars,
-      status: GameAttemptStatusEnum.ACTIVE,
-    }),
-    [chars],
+  return useMemo<[GameAttemptType, typeof handleAttemptSubmit]>(
+    () => [
+      {
+        chars,
+        status: GameAttemptStatusEnum.ACTIVE,
+      },
+      handleAttemptSubmit,
+    ],
+    [chars, handleAttemptSubmit],
   );
 }

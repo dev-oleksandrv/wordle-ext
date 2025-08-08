@@ -18,33 +18,36 @@ interface GameInfiniteModeProps {
 
 export function GameInfiniteMode({ dictionary }: GameInfiniteModeProps) {
   const { locale } = useIntl();
-  const { attempts, status, currentWord, setCurrentWord, addAttempt } = useStore(
+  const { attempts, status, currentWord, setCurrentWord, addAttempt, setStatus } = useStore(
     locale === LocaleEnum.EN ? gameInfiniteBoardENStore : gameInfiniteBoardUKStore,
   );
 
   const [isPending, setIsPending] = useState(false);
 
-  const handleAttemptSubmit = useCallback(
+  const handleAttemptProcess = useCallback(
     async (attempt: GameAttemptType) => {
       setIsPending(true);
-      addAttempt(validateAttempt(currentWord, attempt));
+
+      const validatedAttempt = validateAttempt(currentWord, attempt);
+      const isLastAttempt = attempts.length + 1 === GAME_MAX_ATTEMPTS;
+      addAttempt(validatedAttempt);
+      if (isLastAttempt || validatedAttempt.status === GameAttemptStatusEnum.CORRECT) {
+        setStatus(GameStatusEnum.FINISHED);
+      }
+
       setIsPending(false);
     },
     [currentWord, attempts],
   );
 
-  const handleFooterSubmit = () => handleAttemptSubmit(currentAttempt);
-
   const handleNextWord = () => setCurrentWord(dictionary.getRandomWord(locale, currentWord));
 
-  const currentAttempt = useAttemptInput(locale, {
+  const [currentAttempt, submitAttempt] = useAttemptInput(locale, {
     isPending: isPending,
-    onSubmit: handleAttemptSubmit,
+    onSubmit: handleAttemptProcess,
   });
 
   const lastAttempt = attempts[attempts.length - 1];
-
-  const isFinished = attempts.length === GAME_MAX_ATTEMPTS || lastAttempt?.status === GameAttemptStatusEnum.CORRECT;
 
   useEffect(() => {
     if (status === GameStatusEnum.NOT_STARTED) {
@@ -58,10 +61,10 @@ export function GameInfiniteMode({ dictionary }: GameInfiniteModeProps) {
 
       <GameBoardFooter
         isDisabled={currentAttempt.chars.length < GAME_MAX_WORD_LENGTH || isPending}
-        onSubmit={handleFooterSubmit}
+        onSubmit={submitAttempt}
       />
 
-      {isFinished && <GameResult lastAttempt={lastAttempt} onNextWord={handleNextWord} />}
+      {status === GameStatusEnum.FINISHED && <GameResult lastAttempt={lastAttempt} onNextWord={handleNextWord} />}
     </>
   );
 }

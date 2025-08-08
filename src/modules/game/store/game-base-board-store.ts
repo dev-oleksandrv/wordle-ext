@@ -9,6 +9,8 @@ export interface GameBaseBoardState {
   status: GameStatusEnum;
   attempts: GameAttemptType[];
   currentWord: string;
+  attemptStartedAt: number | null;
+  attemptFinishedAt: number | null;
 
   setStatus: (status: GameStatusEnum) => void;
   addAttempt: (attempt: GameAttemptType) => void;
@@ -27,8 +29,14 @@ export function createGameBoardStore({ storageName, locale }: CreateGameBoardSto
         status: GameStatusEnum.NOT_STARTED,
         currentWord: "",
         attempts: [],
+        attemptStartedAt: null,
+        attemptFinishedAt: null,
 
-        setStatus: (status: GameStatusEnum) => set({ status }),
+        setStatus: (status: GameStatusEnum) =>
+          set((state) => ({
+            status,
+            attemptFinishedAt: status === GameStatusEnum.FINISHED ? Date.now() : state.attemptFinishedAt,
+          })),
         addAttempt: (attempt) =>
           set((state) => ({
             attempts: [...state.attempts, attempt],
@@ -37,6 +45,7 @@ export function createGameBoardStore({ storageName, locale }: CreateGameBoardSto
           set({
             currentWord: word,
             status: GameStatusEnum.IN_PROGRESS,
+            attemptStartedAt: Date.now(),
             attempts: [],
           }),
       }),
@@ -46,6 +55,8 @@ export function createGameBoardStore({ storageName, locale }: CreateGameBoardSto
           status: state.status,
           currentWord: state.currentWord,
           attempts: state.attempts,
+          attemptStartedAt: state.attemptStartedAt,
+          attemptFinishedAt: state.attemptFinishedAt,
         }),
         storage: createJSONStorage(() => new ChromeStoragePersistAdapter()),
       },
