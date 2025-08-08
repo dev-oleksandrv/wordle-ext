@@ -1,3 +1,7 @@
+import { useRouter } from "@/modules/router";
+
 export default function App() {
-  return <div></div>;
+  const { currentView } = useRouter();
+
+  return <div>{currentView}</div>;
 }

@@ -1,1 +1,9 @@
 @import "tailwindcss";
+
+body {
+  @apply w-[400px] h-[500px] bg-[radial-gradient(60%_60%_at_50%_0%,#fff0f4,white_60%)] text-zinc-900;
+}
+
+#root {
+  @apply flex flex-col items-center justify-center w-full h-full;
+}
