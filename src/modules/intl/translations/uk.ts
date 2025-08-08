@@ -10,6 +10,16 @@ const TRANSLATIONS: IntlTranslationsDictionaryType = {
     en: "Англійська",
     uk: "Українська",
   },
+  game: {
+    tabs: {
+      "daily-challenge": "Щоденний виклик",
+      "infinite-mode": "Безкінечний",
+    },
+    footer: {
+      "submit-button": "Підтвердити спробу",
+      "helper-text": "або натисніть 'Enter' для підтвердження",
+    },
+  },
 };
 
 export default TRANSLATIONS;

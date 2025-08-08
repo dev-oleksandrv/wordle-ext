@@ -16,7 +16,7 @@ export function SetupView() {
 
   return (
     <div className="flex flex-col size-full p-4">
-      <div className="flex-none">
+      <div className="flex-none h-8 flex flex-row items-center">
         <Logo />
       </div>
 

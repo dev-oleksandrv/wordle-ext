@@ -1,1 +1,5 @@
-export type IntlTranslationsDictionaryType = Record<string, string | Record<string, string>>;
+export type IntlTranslationsDictionaryNodeType = string | IntlTranslationsDictionaryType;
+
+export interface IntlTranslationsDictionaryType {
+  [key: string]: IntlTranslationsDictionaryNodeType;
+}

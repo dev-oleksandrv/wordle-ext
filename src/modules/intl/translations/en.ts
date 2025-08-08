@@ -10,6 +10,16 @@ const TRANSLATIONS: IntlTranslationsDictionaryType = {
     en: "English",
     uk: "Ukrainian",
   },
+  game: {
+    tabs: {
+      "daily-challenge": "Daily Challenge",
+      "infinite-mode": "Infinite Mode",
+    },
+    footer: {
+      "submit-button": "Submit Attempt",
+      "helper-text": "or press 'Enter' to submit",
+    },
+  },
 };
 
 export default TRANSLATIONS;
