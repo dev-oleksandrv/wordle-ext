@@ -19,5 +19,6 @@ export enum GameAttemptCharStatusEnum {
   ACTIVE = "ACTIVE",
   NOT_IN_WORD = "NOT_IN_WORD",
   WRONG_POSITION = "WRONG_POSITION",
+  PARTLY_CORRECT = "PARTLY_CORRECT",
   CORRECT = "CORRECT",
 }

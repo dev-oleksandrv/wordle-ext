@@ -30,32 +30,59 @@ export function validateAttempt(targetWord: string, attempt: GameAttemptType): G
     };
   }
 
-  const result: GameAttemptCharType[] = new Array(guess.length);
-  const remaining = new Map<string, number>();
+  const n = target.length;
+  const result: GameAttemptCharType[] = new Array(n);
 
-  for (let i = 0; i < target.length; i++) {
+  const tCount = new Map<string, number>();
+  const gCount = new Map<string, number>();
+  const correctCount = new Map<string, number>();
+
+  const correctIdxByLetter = new Map<string, number[]>();
+  const unresolvedIdx: number[] = [];
+
+  for (let i = 0; i < n; i++) {
     const t = target[i];
     const g = guess[i];
 
+    tCount.set(t, (tCount.get(t) ?? 0) + 1);
+    gCount.set(g, (gCount.get(g) ?? 0) + 1);
+
     if (g === t) {
       result[i] = { value: attempt.chars[i].value, status: GameAttemptCharStatusEnum.CORRECT };
+      correctCount.set(g, (correctCount.get(g) ?? 0) + 1);
+      const arr = correctIdxByLetter.get(g);
+      if (arr) arr.push(i);
+      else correctIdxByLetter.set(g, [i]);
     } else {
       result[i] = { value: attempt.chars[i].value, status: GameAttemptCharStatusEnum.ACTIVE };
-      remaining.set(t, (remaining.get(t) ?? 0) + 1);
+      unresolvedIdx.push(i);
     }
   }
 
-  for (let i = 0; i < target.length; i++) {
-    if (result[i].status !== GameAttemptCharStatusEnum.ACTIVE) continue;
+  const remaining = new Map<string, number>();
+  for (const [letter, cnt] of tCount) {
+    remaining.set(letter, cnt - (correctCount.get(letter) ?? 0));
+  }
 
+  for (const i of unresolvedIdx) {
     const g = guess[i];
     const left = remaining.get(g) ?? 0;
-
     if (left > 0) {
       result[i].status = GameAttemptCharStatusEnum.WRONG_POSITION;
       remaining.set(g, left - 1);
     } else {
       result[i].status = GameAttemptCharStatusEnum.NOT_IN_WORD;
+    }
+  }
+
+  for (const [letter, tCnt] of tCount) {
+    const deficit = tCnt - (gCount.get(letter) ?? 0);
+    if (deficit > 0) {
+      const idxs = correctIdxByLetter.get(letter) ?? [];
+      for (let k = 0; k < deficit && k < idxs.length; k++) {
+        const idx = idxs[k];
+        result[idx].status = GameAttemptCharStatusEnum.PARTLY_CORRECT;
+      }
     }
   }
 

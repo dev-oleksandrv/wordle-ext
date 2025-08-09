@@ -22,4 +22,8 @@ export class Dictionary {
     }
     return randomWord;
   }
+
+  public checkWordExists(word: string, locale: LocaleEnum): boolean {
+    return this.localisedDictionary[locale].includes(word.toLowerCase());
+  }
 }
