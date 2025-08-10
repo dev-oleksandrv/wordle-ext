@@ -22,11 +22,11 @@ export function useBoardManager(locale: LocaleEnum, store: StoreApi<GameBaseBoar
     async (attempt: GameAttemptType) => {
       setIsPending(true);
 
-      if (!dictionary.checkWordExists(attempt.chars.map((c) => c.value).join(""), locale)) {
-        setIsPending(false);
-        alert("The word does not exist in the dictionary. Please try again.");
-        return;
-      }
+      // if (!dictionary.checkWordExists(attempt.chars.map((c) => c.value).join(""), locale)) {
+      //   setIsPending(false);
+      //   alert("The word does not exist in the dictionary. Please try again.");
+      //   return;
+      // }
 
       const validatedAttempt = validateAttempt(state.currentWord, attempt);
       const isLastAttempt = state.attempts.length + 1 === GAME_MAX_ATTEMPTS;
