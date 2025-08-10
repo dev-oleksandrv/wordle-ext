@@ -5,7 +5,7 @@ import { LocaleEnum, useIntl } from "@/modules/intl";
 import { GameBoard } from "@/modules/game/components/game-board";
 import { GAME_MAX_WORD_LENGTH } from "@/modules/game/constants";
 import { gameInfiniteBoardENStore, gameInfiniteBoardUKStore } from "@/modules/game/store/game-infinite-board-store";
-import { GameResult } from "@/modules/game/components/game-result";
+import { GameInfiniteResult } from "@/modules/game/components/game-infinite-result";
 import { useBoardManager } from "@/modules/game/hooks/use-board-manager";
 
 export function GameInfiniteMode() {
@@ -16,7 +16,7 @@ export function GameInfiniteMode() {
     isPending,
     submitAttempt,
     updateCurrentWord,
-    state: { attempts, status },
+    state: { attempts, currentWord, status },
   } = useBoardManager(locale, locale === LocaleEnum.EN ? gameInfiniteBoardENStore : gameInfiniteBoardUKStore);
 
   useEffect(() => {
@@ -34,7 +34,14 @@ export function GameInfiniteMode() {
         onSubmit={submitAttempt}
       />
 
-      {status === GameStatusEnum.FINISHED && <GameResult lastAttempt={lastAttempt} onNextWord={updateCurrentWord} />}
+      {status === GameStatusEnum.FINISHED && (
+        <GameInfiniteResult
+          currentWord={currentWord}
+          attemptsCount={attempts.length}
+          lastAttemptStatus={lastAttempt.status}
+          onNextWord={updateCurrentWord}
+        />
+      )}
     </>
   );
 }

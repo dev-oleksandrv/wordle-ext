@@ -19,6 +19,19 @@ const TRANSLATIONS: IntlTranslationsDictionaryType = {
       "submit-button": "Підтвердити спробу",
       "helper-text": "або натисніть 'Enter' для підтвердження",
     },
+    result: {
+      failed: {
+        title: "Невдала спроба",
+        description:
+          "Правильне слово було <span class='font-bold uppercase'>\"{word}\"</span>. Не хвилюйтеся, ви впораєтеся наступного разу!",
+      },
+      success: {
+        title: "Слово розгадано!",
+        description:
+          "Ви вгадали слово <span class='font-bold uppercase'>\"{word}\"</span> за <span class='font-bold'>{attemptsCount}</span> спроб!",
+      },
+      "next-word-button": "Наступне слово",
+    },
   },
 };
 

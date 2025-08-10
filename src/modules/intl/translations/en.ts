@@ -19,6 +19,19 @@ const TRANSLATIONS: IntlTranslationsDictionaryType = {
       "submit-button": "Submit Attempt",
       "helper-text": "or press 'Enter' to submit",
     },
+    result: {
+      failed: {
+        title: "Better luck next time",
+        description:
+          "The correct word was <span class='font-bold uppercase'>\"{word}\"</span>. Don't worry, you'll get it next time!",
+      },
+      success: {
+        title: "Word cracked!",
+        description:
+          "You guessed the word <span class='font-bold uppercase'>\"{word}\"</span> in <span class='font-bold'>{attemptsCount}</span> attempts!",
+      },
+      "next-word-button": "Next Word",
+    },
   },
 };
 

@@ -16,7 +16,7 @@ export function GameDailyMode() {
     isPending,
     submitAttempt,
     updateCurrentWord,
-    state: { attempts, attemptStartedAt, attemptFinishedAt, status, setStatus },
+    state: { attempts, attemptStartedAt, attemptFinishedAt, currentWord, status, setStatus },
   } = useBoardManager(locale, locale === LocaleEnum.EN ? gameDailyBoardENStore : gameDailyBoardUKStore);
 
   const dailyStartCheckIntervalRef = useRef<ReturnType<typeof setInterval>>(null);
@@ -72,7 +72,9 @@ export function GameDailyMode() {
 
       {status === GameStatusEnum.FINISHED && attemptFinishedAt !== null && (
         <GameDailyResult
-          lastAttempt={lastAttempt}
+          currentWord={currentWord}
+          lastAttemptStatus={lastAttempt.status}
+          attemptsCount={attempts.length}
           lastAttemptFinishedAt={attemptFinishedAt}
           onTimerReset={handleReset}
         />

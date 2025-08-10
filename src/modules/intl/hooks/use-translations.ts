@@ -10,7 +10,7 @@ export function useTranslations(keyPrefix?: string) {
   const { locale } = useStore(intlStore);
 
   return useCallback(
-    (key: string) => {
+    (key: string, params: Record<string, string | number> = {}) => {
       const isKeyPrefixValid = !keyPrefix || keyPrefix.match(KEY_REGEX);
       if (!isKeyPrefixValid) {
         console.warn("Invalid key prefix format. It should match the pattern: parent.child");
@@ -35,7 +35,10 @@ export function useTranslations(keyPrefix?: string) {
         return key;
       }
 
-      return translation;
+      return translation.replace(/\{(\w+)}/g, (match, p1) => {
+        const value = params[p1];
+        return value !== undefined && value !== null ? String(value) : match;
+      });
     },
     [locale],
   );
